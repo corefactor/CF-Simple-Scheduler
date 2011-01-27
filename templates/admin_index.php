@@ -4,7 +4,7 @@
 <thead>
     <tr>
         <th>Name</th>
-        <th>Date</th>
+        <th>Ocurrs</th>
 		<th>Time Start</th>
 		<th>Time End</th>
 		<th>Notes</th>
@@ -14,7 +14,7 @@
 <tfoot>
     <tr>
         <th>Name</th>
-        <th>Date</th>
+        <th>Ocurrs</th>
 		<th>Time Start</th>
 		<th>Time End</th>
 		<th>Notes</th>
@@ -25,9 +25,9 @@
 	<?php foreach($timeslots as $slot): ?>
 		<tr>
 			<td><?php echo $slot->name ?></td>
-			<td><?php echo $slot->date ?></td>
-			<td><?php echo $slot->time_start ?></td>
-			<td><?php echo $slot->time_end ?></td>
+			<td><?php echo empty($slot->week_day) ? $slot->date : $slot->week_day ; ?></td>
+			<td><?php echo date('H:i', strtotime($slot->time_start)); ?></td>
+			<td><?php echo date('H:i', strtotime($slot->time_end)); ?></td>
 			<td><?php echo $slot->notes ?></td>
 			<td>
 				<a href="admin.php?page=cf_simple_schedule_edit&id=<?php echo $slot->id ?>">Edit</a> | 

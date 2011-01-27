@@ -1,3 +1,5 @@
+<?php $weekdays = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'); ?>
+
 <form method="post" id="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>"> 
 	
 	<input type="hidden" name="cfss_id" value="<?php echo $_POST['cfss_id'] ?>" />
@@ -7,6 +9,22 @@
 			<label for="cfss_name">Name (identifier)</label>
 			<input type="text" name="cfss_name" id="cfss_name" value="<?php echo $_POST['cfss_name'] ?>" />
 			<p>You will be able to add this code to a post or a page. ex: <strong>[cfss_time_slots name="identifier"]</strong></p>
+		</li>
+		<li>
+			<label for="cfss_week_day">Weekday</label>
+			<select name="cfss_week_day" id="cfss_week_day">
+				<option></option>
+				<?php foreach($weekdays as $weekday): ?>
+					<?php if ($_POST['cfss_week_day'] == strtolower($weekday)): ?>
+						<option selected value="<?php echo strtolower($weekday) ?>"><?php _e($weekday) ?></option>
+					<?php else: ?>
+						<option value="<?php echo strtolower($weekday) ?>"><?php _e($weekday) ?></option>
+					<?php endif; ?>
+				<?php endforeach; ?>
+			</select>
+		</li>
+		<li>
+			Or
 		</li>
 		<li>
 			<label for="cfss_date">Date</label>

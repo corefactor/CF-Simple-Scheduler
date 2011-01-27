@@ -29,8 +29,8 @@ Class CfSimpleScheduler {
 		global $wpdb;
 		$this->table_name = $wpdb->prefix . 'cf_scheduler';
 				
-		$this->plugin_url = WP_PLUGIN_URL . '/' . 'cf_simple_schedule/';
-		$this->plugin_directory = WP_PLUGIN_DIR . '/' . 'cf_simple_schedule/';
+		$this->plugin_url = WP_PLUGIN_URL . '/' . basename(dirname(__FILE__)) . '/';
+		$this->plugin_directory = WP_PLUGIN_DIR . '/' . basename(dirname(__FILE__)) . '/';
 				
 	}
 
@@ -80,10 +80,9 @@ Class CfSimpleScheduler {
 			
 		}
 	
-		
 		include($this->plugin_directory . 'templates/admin_edit.php');
-		echo '</div>';
-		
+
+		echo '</div>';		
 		
 	}
 	
@@ -122,6 +121,10 @@ Class CfSimpleScheduler {
 		global $wpdb;
 		
 		if (is_numeric($_POST['id'])) {
+			
+			if (!empty($_POST['week_day'])) {
+				unset($_POST['date']);
+			}
 			
 			$result = $wpdb->update($this->table_name, $_POST, array( 'id' => $_POST['id'] ), array( '%s', '%s' ), array( '%d' ) );		
 			
@@ -235,10 +238,14 @@ Class CfSimpleScheduler {
 				
 		foreach($rows as $row) {
 			
+			$time_start = date('H:i', strtotime($row['time_start']));
+			$time_end = date('H:i', strtotime($row['time_end']));
+			
 			$html .= "<li><span class=\"title\">{$row['name']}</span>";
 			$html .= "<span class=\"date\">{$row['date']}</span>";
-			$html .= "<span class=\"time_start\">{$row['time_start']}</span>";
-			$html .= "<span class=\"time_end\">{$row['time_end']}</span>";
+			$html .= "<span class=\"week_day\">{$row['week_day']}</span> das ";
+			$html .= "<span class=\"time_start\">{$time_start}</span> às ";
+			$html .= "<span class=\"time_end\">{$time_end}</span>";
 			$html .= "<span class=\"notes\">{$row['notes']}</span>";
 			$html .= "</li>";
 			
@@ -290,7 +297,8 @@ Class CfSimpleScheduler {
 				  id mediumint(9) NOT NULL AUTO_INCREMENT,
 				  name tinytext NOT NULL,
 				  notes text NULL,
-				  date date NOT NULL,
+				  date date NULL,
+				  week_day varchar(70) NULL,
 				  time_start time NOT NULL,
   				  time_end time NOT NULL,
 				  UNIQUE KEY id (id)
